@@ -1,57 +1,43 @@
-# Countdown Timer ⏳
+# 🧠 JavaScript Mini Projects
 
-This is a simple and responsive **Countdown Timer** built using **HTML**, **CSS**, and **JavaScript**.
-
-It counts down to the upcoming **New Year (January 1st)** and updates in real-time, showing:
-
-- Days
-- Hours
-- Minutes
-- Seconds
+This repository contains a collection of beginner-friendly mini projects built using **HTML, CSS, and JavaScript (Vanilla JS)**. Each folder inside this repo represents a separate project with its own logic and design.
 
 ---
 
-## 🔧 Technologies Used
+## 📁 Projects Included
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla JS)
+### 🔸 1. Countdown Timer ⏳
+A simple and responsive Countdown Timer that counts down to the upcoming **New Year (January 1st)**.
 
----
+- **Features**:
+  - Live countdown display (Days, Hours, Minutes, Seconds)
+  - Responsive layout for mobile, tablet, and desktop
+  - Clean UI with real-time updates
 
-## 📱 Responsive Design
-
-The layout is responsive across different screen sizes:
-
-- Mobile: Compact and minimal.
-- Tablet/Desktop: Enlarged text and spacing for better visibility.
-
----
-
-## 💻 Live Preview
-
-Coming soon...
+- **Tech Stack**: HTML, CSS, JavaScript  
+- **Status**: ✅ Completed  
+- **Live Preview**: *(Coming Soon)*  
+- **Folder**: [`Countdown_Timer/`](./Countdown_Timer)
 
 ---
 
-## 📁 Project Structure
+### 🔸 2. Guess the Number Game 🎯
+An interactive number guessing game where the player tries to guess a randomly generated number within a range.
 
+- **Features**:
+  - Instant feedback on guesses ("Too high", "Too low", etc.)
+  - Reset game option
+  - Simple, engaging UI with optional confetti effect
+
+- **Tech Stack**: HTML, CSS, JavaScript  
+- **Status**: ✅ Completed    
+- **Folder**: [`Guess_Num_Game/`](./Guess_Num_Game)
 
 ---
 
-## 🧠 What I Learned
-
-- Using JavaScript to calculate time differences.
-- Working with `Date` objects.
-- DOM Manipulation.
-- Responsive design with media queries.
-
----
-
-## 🚀 How to Use / Run
+## 🚀 How to Use / Run Locally
 
 1. Clone the repository:
-
    ```bash
-   git clone https://github.com/your-username/Javascript.git
-   cd Javascript/day01-countdown
+   git clone https://github.com/Akshayashunmugam/javascript.git
+   cd javascript
