@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)https://686ba684ab14267a444cab23-%2Dcerulean-pavlova-1b5959.netlify.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Guess the Number</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://fav.farm/%F0%9F%8E%AF">
+  <script src="./index.htmml_files/confetti.browser.min.js.download"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #9face6);
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #4b4dd0;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      margin: 15px 0;
+      transition: 0.2s;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 8px 4px;
+      border: none;
+      border-radius: 10px;
+      background-color: #4b4dd0;
+      color: white;
+      cursor: pointer;
+    }
+    #message, #hint, #score, #timer, #highScoreDisplay {
+      margin-top: 12px;
+    }
+    .dark-mode {
+      background: #1a1a2e;
+      color: #eee;
+    }
+    .dark-mode .container {
+      background: #222436;
+    }
+    .dark-toggle {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🎯 Guess the Number</h1>
+  <p id="highScoreDisplay">🏆 High Score: --</p>
+  <label for="difficulty">Level:</label>
+  <select id="difficulty" onchange="setDifficulty()">
+    <option value="10">Easy (1-10)</option>
+    <option value="50">Medium (1-50)</option>
+    <option value="100">Hard (1-100)</option>
+  </select>
+  <input id="num" type="number" placeholder="Enter your guess"> 
+  <div>
+    <button class="btn" onclick="check()">Check</button>
+    <button class="btn" onclick="resetGame()">Play Again</button>
+  </div>
+  <p id="message">⏰ Time's up! The number was: 5</p>
+  <p id="hint"></p>
+  <p id="score">Score: 10</p>
+  <p id="timer">⏱️ Time: 0</p>
+  <p class="dark-toggle"><input type="checkbox" onchange="toggleDarkMode()"> Dark Mode</p>
+</div>
+
+<script>
+  let maxRange = 10, randomNum, score = 10, gameOver = false, lastGuess = null;
+  let timerInterval, timeLeft = 30;
+
+  function launchConfetti() {
+    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    document.getElementById("timer").textContent = `⏱️ Time: ${timeLeft}`;
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      document.getElementById("timer").textContent = `⏱️ Time: ${timeLeft}`;
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById("message").textContent = `⏰ Time's up! The number was: ${randomNum}`;
+        gameOver = true;
+      }
+    }, 1000);
+  }
+
+  function setDifficulty() {
+    maxRange = Number(document.getElementById("difficulty").value);
+    resetGame();
+  }
+
+  function check() {
+    if (gameOver) return;
+
+    const guess = Number(document.getElementById("num").value);
+    const message = document.getElementById("message");
+    const hint = document.getElementById("hint");
+
+    if (!guess || guess < 1 || guess > maxRange) {
+      message.textContent = `⚠️ Enter a number between 1 and ${maxRange}`;
+      return;
+    }
+
+    if (guess === lastGuess) {
+      message.textContent = `⚠️ ${guess} was already guessed!`;
+      return;
+    }
+
+    lastGuess = guess;
+
+    if (guess === randomNum) {
+      message.textContent = "🎉 Correct! You guessed it!";
+      hint.textContent = "";
+      clearInterval(timerInterval);
+      gameOver = true;
+      launchConfetti();
+
+      const saved = JSON.parse(localStorage.getItem('highScoreData')) || { score: 0 };
+      if (score > saved.score) {
+        const playerName = prompt("🎉 New High Score! Enter your name:");
+        const highScoreData = { name: playerName || "Anonymous", score: score };
+        localStorage.setItem('highScoreData', JSON.stringify(highScoreData));
+        updateHighScoreDisplay();
+      }
+    } else {
+      score--;
+      message.textContent = "❌ Wrong guess!";
+      hint.textContent = guess > randomNum ? "Try lower!" : "Try higher!";
+      document.getElementById("score").textContent = "Score: " + score;
+      if (score === 0) {
+        message.textContent = `💀 Game Over! The number was ${randomNum}`;
+        clearInterval(timerInterval);
+        gameOver = true;
+      }
+    }
+  }
+
+  function resetGame() {
+    randomNum = Math.floor(Math.random() * maxRange) + 1;
+    score = 10;
+    gameOver = false;
+    lastGuess = null;
+    document.getElementById("num").value = "";
+    document.getElementById("message").textContent = "Start guessing!";
+    document.getElementById("hint").textContent = "";
+    document.getElementById("score").textContent = "Score: 10";
+    startTimer();
+  }
+
+  function updateHighScoreDisplay() {
+    const display = document.getElementById("highScoreDisplay");
+    const data = JSON.parse(localStorage.getItem('highScoreData'));
+    if (data) display.textContent = `🏆 High Score: ${data.name} — ${data.score}`;
+    else display.textContent = "🏆 High Score: --";
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+  }
+
+  updateHighScoreDisplay();
+  resetGame();
+</script>
+
+
+</body></html>
